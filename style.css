@@ -1,0 +1,165 @@
+body {
+  position: relative;
+  min-height: 200vh;
+  width: 100vw;
+  box-sizing: border-box;
+  background: #fff;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.favorit-title {
+  font-family: 'Favorit', 'Favorit Pro', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #444;
+  margin-bottom: 1.1rem;
+  margin-top: 1.2rem;
+  margin-left: 1.2rem;
+  text-align: left;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.fixed-img-with-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.fixed-img-with-buttons #filter-buttons-container {
+  margin-top: 16px;
+}
+
+
+
+
+
+.collage-img {
+  position: absolute;
+  width: 18vw;
+  height: auto;
+  object-fit: cover;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  border-radius: 0;
+  transition: box-shadow 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+
+.collage-img:nth-of-type(1) {
+  margin-top: 3.2rem;
+}
+
+
+.collage-img[src$="Binder2.pdf_Page_05.jpg"] {
+  position: fixed !important;
+  top: 1vw;
+  right: 1vw;
+  left: auto !important;
+  width: 56vw;
+  max-width: 900px;
+  z-index: 9999;
+  user-select: none;
+  object-fit: contain;
+  transform: none;
+  transition: width 0.4s cubic-bezier(.4,1.5,.7,1), left 0.4s cubic-bezier(.4,1.5,.7,1), right 0.4s cubic-bezier(.4,1.5,.7,1), top 0.4s cubic-bezier(.4,1.5,.7,1), transform 0.4s cubic-bezier(.4,1.5,.7,1);
+}
+
+
+
+
+
+
+
+.collage-img:hover {
+  z-index: 10;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  transform: scale(1.04) rotate(-2deg);
+}
+
+.collage-img[src$="Binder2.pdf_Page_05.jpg"]:hover {
+  z-index: 9999;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  transform: none;
+}
+
+.collage-img.expanded-center[src$="Binder2.pdf_Page_05.jpg"] {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: 50% !important;
+  width: 96vw !important;
+  max-width: 1650px !important;
+  height: auto !important;
+  transform: translate(-50%, -50%) scale(1.005);
+  z-index: 30000 !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  cursor: zoom-out;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+#filter-buttons-container {
+  position: static;
+  display: flex;
+  gap: 1rem;
+  margin-top: 32px;
+  background: none;
+  border: none;
+}
+
+@font-face {
+  font-family: 'Favorit';
+  src: url('path/to/Favorit.woff2') format('woff2'),
+       url('path/to/Favorit.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+#filter-buttons-container button {
+  background: #222;
+  color: #fff;
+  border: none;
+  padding: 0.7em 1.5em;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  transition: background 0.2s, transform 0.2s;
+  font-family: 'Favorit', 'Favorit Pro', sans-serif;
+}
+#filter-buttons-container button:hover {
+  background: #444;
+  transform: translateY(-2px) scale(1.04);
+}
+@media (max-width: 900px) {
+  #filter-buttons-container {
+    top: calc(1vw + 80vw + 12px);
+    right: 4vw;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  #filter-buttons-container button {
+    font-size: 0.95rem;
+    padding: 0.6em 1.1em;
+  }
+}
+
+
+
+@media (max-width: 900px) {
+  .collage-img {
+    height: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .collage-img {
+    max-width: 80vw;
+    max-height: 20vh;
+  }
+}
