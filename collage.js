@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const maxLeft = window.innerWidth - imgWidth - 10;
   const maxTop = window.innerHeight - imgHeight - 20; // fit within single viewport with bottom padding
 
+  // Store original positions for reset functionality
+  const originalPositions = new Map();
+
   // Fixed image bounding box
   // Match CSS: position: fixed; top: 24px; right: 24px; width: 56vw (max 800px)
   const fixedTop = 24;
@@ -185,6 +188,9 @@ document.addEventListener('DOMContentLoaded', () => {
     img.style.width = imgWidth + 'px';
     img.style.height = 'auto';
     img.style.zIndex = 1;
+    
+    // Store original position
+    originalPositions.set(img, { left, top });
   });
 
 
@@ -296,9 +302,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // Create drift toggle button
   const driftToggleBtn = document.createElement('button');
   driftToggleBtn.className = 'drift-toggle-btn';
-  driftToggleBtn.innerHTML = '⏸'; // Pause symbol (since drifting starts enabled)
-  driftToggleBtn.title = 'Toggle image drift animation';
+  driftToggleBtn.innerHTML = '▶'; // Play symbol (since drifting starts disabled)
+  driftToggleBtn.title = 'Start image drift animation';
+  driftToggleBtn.style.textIndent = '2px'; // Offset to visually center the play triangle
   document.body.appendChild(driftToggleBtn);
+
+  // Create reset button
+  const resetBtn = document.createElement('button');
+  resetBtn.className = 'reset-btn';
+  resetBtn.innerHTML = '↺'; // Reset symbol
+  resetBtn.title = 'Reset images to original positions';
+  document.body.appendChild(resetBtn);
 
   let currentNodeId = 'node0'; // Start at title node with all images blurred
   let wayfindingActive = true; // Start active by default
@@ -351,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Animation state for drifting images
   const driftingImages = new Map(); // Store animation state for each image
   let animationFrameId = null;
-  let driftingEnabled = true; // Global toggle for drifting animation
+  let driftingEnabled = false; // Global toggle for drifting animation - starts disabled
 
   // Function to start drifting animation for an image
   function startDrifting(img) {
@@ -401,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!img.src.includes('Binder2.pdf_Page_05.jpg')) {
         img.classList.add('blurred');
         img.classList.remove('unblurred');
-        startDrifting(img); // Start drifting when blurred
+        // Don't start drifting automatically - wait for user to click play
       }
     });
   }
@@ -504,12 +518,50 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize wayfinding on page load
   activateWayfinding();
 
+  // Function to reset images to original positions
+  function resetImagePositions() {
+    images.forEach(img => {
+      if (img.src.includes('Binder2.pdf_Page_05.jpg')) {
+        return; // Skip the fixed research image
+      }
+      
+      const originalPos = originalPositions.get(img);
+      if (originalPos) {
+        img.style.left = originalPos.left + 'px';
+        img.style.top = originalPos.top + 'px';
+        
+        // Update drifting state if image is currently drifting
+        if (driftingImages.has(img)) {
+          const state = driftingImages.get(img);
+          state.left = originalPos.left;
+        }
+      }
+    });
+  }
+
   // Drift toggle button click handler
   driftToggleBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     driftingEnabled = !driftingEnabled;
     driftToggleBtn.innerHTML = driftingEnabled ? '⏸' : '▶'; // Pause or Play symbol
-    driftToggleBtn.title = driftingEnabled ? 'Pause image drift' : 'Resume image drift';
+    driftToggleBtn.title = driftingEnabled ? 'Pause image drift' : 'Start image drift';
+    // Adjust text-indent: play symbol needs offset, pause symbol doesn't
+    driftToggleBtn.style.textIndent = driftingEnabled ? '0' : '2px';
+    
+    // When enabling drift, start drifting for all blurred images
+    if (driftingEnabled) {
+      images.forEach(img => {
+        if (img.classList.contains('blurred')) {
+          startDrifting(img);
+        }
+      });
+    }
+  });
+
+  // Reset button click handler
+  resetBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    resetImagePositions();
   });
 
   // Wayfinding arrow key navigation
