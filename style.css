@@ -1,12 +1,13 @@
 body {
   position: relative;
-  min-height: 200vh;
+  min-height: 100vh;
   width: 100vw;
   box-sizing: border-box;
   background: #fff;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .favorit-title {
@@ -22,17 +23,6 @@ body {
   text-transform: uppercase;
 }
 
-.fixed-img-with-buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  width: fit-content;
-  margin: 0 auto;
-}
-
-.fixed-img-with-buttons #filter-buttons-container {
-  margin-top: 16px;
-}
 
 
 
@@ -43,7 +33,7 @@ body {
   width: 18vw;
   height: auto;
   object-fit: cover;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  box-shadow: none;
   border-radius: 0;
   transition: box-shadow 0.2s, transform 0.2s;
   cursor: pointer;
@@ -56,33 +46,29 @@ body {
 
 .collage-img[src$="Binder2.pdf_Page_05.jpg"] {
   position: fixed !important;
-  top: 1vw;
-  right: 1vw;
-  left: auto !important;
+  top: 24px;
+  right: 24px;
+  left: auto;
   width: 56vw;
-  max-width: 900px;
-  z-index: 9999;
+  max-width: 800px;
+  height: auto;
+  z-index: 10001;
   user-select: none;
   object-fit: contain;
   transform: none;
+  cursor: zoom-in;
   transition: width 0.4s cubic-bezier(.4,1.5,.7,1), left 0.4s cubic-bezier(.4,1.5,.7,1), right 0.4s cubic-bezier(.4,1.5,.7,1), top 0.4s cubic-bezier(.4,1.5,.7,1), transform 0.4s cubic-bezier(.4,1.5,.7,1);
 }
 
 
 
 
-
-
-
 .collage-img:hover {
-  z-index: 10;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-  transform: scale(1.04) rotate(-2deg);
+  box-shadow: none;
 }
 
 .collage-img[src$="Binder2.pdf_Page_05.jpg"]:hover {
-  z-index: 9999;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  box-shadow: none;
   transform: none;
 }
 
@@ -102,51 +88,12 @@ body {
 }
 
 
-#filter-buttons-container {
-  position: static;
-  display: flex;
-  gap: 1rem;
-  margin-top: 32px;
-  background: none;
-  border: none;
-}
-
 @font-face {
   font-family: 'Favorit';
   src: url('path/to/Favorit.woff2') format('woff2'),
        url('path/to/Favorit.woff') format('woff');
   font-weight: normal;
   font-style: normal;
-}
-
-
-#filter-buttons-container button {
-  background: #222;
-  color: #fff;
-  border: none;
-  padding: 0.7em 1.5em;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  transition: background 0.2s, transform 0.2s;
-  font-family: 'Favorit', 'Favorit Pro', sans-serif;
-}
-#filter-buttons-container button:hover {
-  background: #444;
-  transform: translateY(-2px) scale(1.04);
-}
-@media (max-width: 900px) {
-  #filter-buttons-container {
-    top: calc(1vw + 80vw + 12px);
-    right: 4vw;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  #filter-buttons-container button {
-    font-size: 0.95rem;
-    padding: 0.6em 1.1em;
-  }
 }
 
 
@@ -162,4 +109,61 @@ body {
     max-width: 80vw;
     max-height: 20vh;
   }
+}
+
+/* Wayfinding navigation dot */
+.wayfinding-box {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border: none;
+  background: #ff0000;
+  border-radius: 50%;
+  z-index: 10002;
+  pointer-events: none;
+  transition: all 0.3s ease-out;
+  box-shadow: 0 0 6px rgba(255, 0, 0, 0.7);
+}
+
+/* Blur effect for images */
+.collage-img.blurred {
+  filter: blur(8px);
+  transition: filter 0.4s ease-in-out;
+}
+
+.collage-img.unblurred {
+  filter: blur(0px);
+  transition: filter 0.4s ease-in-out;
+}
+
+/* Drift toggle button */
+.drift-toggle-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border: none;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10003;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.drift-toggle-btn:hover {
+  background: rgba(0, 0, 0, 0.85);
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.drift-toggle-btn:active {
+  transform: scale(0.95);
 }
